@@ -1,30 +1,53 @@
 class Todo {
-  constructor(title, description, dueDate, priority, notes = "", checklist = []) {
-    this.title = title,           
-    this.description = description,
-    this.dueDate = dueDate,       
-    this.priority = priority,     
-    this.notes = notes,           // Optional notes about the task
-    this.checklist = checklist,   // Optional checklist (array of sub-tasks)
-    this.completed = false       
+  constructor(
+    title,
+    description,
+    dueDate,
+    priority,
+    notes = "",
+    checklist = []
+  ) {
+    this.id = crypto.randomUUID();
+    (this.title = title),
+    (this.description = description),
+    (this.dueDate = dueDate),
+    (this.priority = priority),
+    (this.notes = notes), // Optional notes about the task
+    (this.checklist = checklist), // Optional checklist (array of sub-tasks)
+    (this.completed = false);
   }
 
-  changeCompleted(){
-    this.completed = !this.completed
+  changeCompleted() {
+    this.completed = !this.completed;
+  }
+
+  lowerPriority() {
+    if (this.priority >= 0) {
+      this.priority--;
+    } else {
+      // Not possible to lower any further than 0
+    }
+  }
+
+  increasePriority() {
+    if (this.priority <= 20) {
+      this.priority++;
+    } else {
+      // The limit of each priority will be 20
+    }
   }
 }
 
 class Projects {
-  constructor (name){
-    this.name = name,
-    this.todos = []
+  constructor(name) {
+    (this.name = name), (this.todos = []);
   }
 
-  addTodo(todo){
-    this.todos.push(todo)
+  addTodo(todo) {
+    this.todos.push(todo);
   }
 
-  removeTodo(title){
-    this.todos = this.todos.filter(todo => todo.title !== title)
+  removeTodo(id) {
+    this.todos = this.todos.filter((todo) => todo.id !== id);
   }
 }
