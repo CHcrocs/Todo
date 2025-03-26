@@ -1,6 +1,7 @@
-class Projects {
+export class Projects {
   constructor(name) {
-    (this.name = name), (this.todos = []);
+    this.name = name, 
+    this.todos = [];
   }
 
   addTodo(todo) {
