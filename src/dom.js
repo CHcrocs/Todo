@@ -1,5 +1,5 @@
 import { Todo } from "./todo";
-import { Project } from "./project";
+import { Projects } from "./project";
 
 const projectContainer = document.getElementById("project_list");
 const todoListContainer = document.getElementById("todo_list");
@@ -17,7 +17,7 @@ function createDefaultProject() {
 
 export function renderProjects() {
     projectContainer.innerHTML = "";
-    projects.forEach((project, index) => {
+    projects.forEach((project) => {
         const projectItem = document.createElement("button");
         projectItem.textContent = project.name;
         projectItem.classList.add("project_item");
@@ -30,7 +30,7 @@ export function renderProjects() {
             renderTodos();
             renderProjects();
         });
-        
+
         projectContainer.appendChild(projectItem);
     });
 }
@@ -38,10 +38,9 @@ export function renderProjects() {
 export function renderTodos() {
     todoListContainer.innerHTML = "";
 
-    if (!currentProject) 
-        return;
+    if (!currentProject) return;
 
-    currentProject.todos.forEach(todo => {
+    currentProject.todos.forEach((todo) => {
         const todoItem = document.createElement("div");
         todoItem.classList.add("todo_item");
         todoItem.style.borderLeft = `5px solid ${getPriorityColor(todo.priority)}`;
@@ -54,7 +53,7 @@ export function renderTodos() {
         `;
 
         todoItem.querySelector(".expand_btn").addEventListener("click", () => {
-            // Editar todo
+            editTodo(todo);
         });
 
         todoItem.querySelector(".delete_btn").addEventListener("click", () => {
@@ -63,6 +62,45 @@ export function renderTodos() {
         });
 
         todoListContainer.appendChild(todoItem);
-    })
-
+    });
 }
+
+todoForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    if (!currentProject) return;
+
+    const title = document.getElementById("title").value;
+    const description = document.getElementById("description").value;
+    const dueDate = document.getElementById("due_date").value;
+    const priority = parseInt(document.getElementById("priority").value);
+
+    if (title && dueDate) {
+        const newTodo = new Todo(title, description, dueDate, priority);
+        currentProject.addTodo(newTodo);
+        renderTodos();
+        todoForm.reset();
+    }
+});
+
+function editTodo(todo) {
+    const newTitle = prompt("Edit title: ", todo.title);
+    const newDescription = prompt("Edit description: ", todo.description);
+    const newDueDate = prompt("Edit Due Date (AAAA-MM-DD): ", todo.dueDate);
+    const newPriority = prompt("Edit priority:", todo.priority);
+
+    if (newTitle) todo.title = newTitle;
+    if (newDescription) todo.description = newDescription;
+    if (newDueDate) todo.dueDate = newDueDate;
+    if (newPriority) todo.priority = parseInt(newPriority);
+
+    renderTodos();
+}
+
+function getPriorityColor(priority) {
+    if (priority > 10) return "red";
+    if (priority > 5) return "orange";
+    return "green";
+}
+
+createDefaultProject();
