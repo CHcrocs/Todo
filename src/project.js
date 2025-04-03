@@ -9,6 +9,7 @@ export class Projects {
   }
 
   removeTodo(id) {
-    this.todos = this.todos.filter((todo) => todo.id !== id);
+    const removedTodo = this.todos.filter(todo => todo.id !== id);
+    this.todos.pop(removedTodo);
   }
 }

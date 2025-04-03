@@ -1,5 +1,6 @@
-import { Todo } from "./todo";
-import { Projects } from "./project";
+import { Todo } from "./todo.js";
+import { Projects } from "./project.js";
+import { format } from "date-fns";
 
 const projectContainer = document.getElementById("project_list");
 const todoListContainer = document.getElementById("todo_list");
@@ -9,7 +10,7 @@ let projects = [];
 let currentProject = null;
 
 function createDefaultProject() {
-    const defaultProject = new Project("My project");
+    const defaultProject = new Projects("My project");
     projects.push(defaultProject);
     currentProject = defaultProject;
     renderProjects();
@@ -47,7 +48,8 @@ export function renderTodos() {
 
         todoItem.innerHTML = `
             <h3>${todo.title}</h3>
-            <p><strong>Data:</strong> ${todo.dueDate}</p>
+            <p>${todo.description}</p>
+            <p><strong>Data:</strong> ${format(todo.dueDate, "yyyy-mm-dd")}</p>
             <button class="expand_btn" data_id="${todo.id}">✏️</button>
             <button class="delete_btn" data_id="${todo.id}">🗑️</button>
         `;
@@ -86,7 +88,7 @@ todoForm.addEventListener("submit", (event) => {
 function editTodo(todo) {
     const newTitle = prompt("Edit title: ", todo.title);
     const newDescription = prompt("Edit description: ", todo.description);
-    const newDueDate = prompt("Edit Due Date (AAAA-MM-DD): ", todo.dueDate);
+    const newDueDate = prompt("Edit Due Date (yyyy-mm-dd): ", todo.dueDate);
     const newPriority = prompt("Edit priority:", todo.priority);
 
     if (newTitle) todo.title = newTitle;
